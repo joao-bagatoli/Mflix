@@ -1,4 +1,4 @@
-const mysql = require('mysql2/promise');
+const mysql = require('mysql2/promise.js');
 
 async function conectarBD() {
     if (global.conexao && global.conexao.state !== 'disconnected') {
@@ -15,8 +15,6 @@ async function conectarBD() {
         }
     );
 
-    console.log('conexao', conexao);
-
     global.conexao = conexao;
     return conexao;
 }
@@ -25,7 +23,7 @@ async function buscarUsuario(usuario) {
     const conexao = await conectarBD();
 
     const sql = "select * from usuarios where usuemail=? and ususenha=?;";
-    const [usuarioEncontrado] = conexao.query(sql, [usuario.email, usuario.senha]);
+    const [usuarioEncontrado] = await conexao.query(sql, [usuario.email, usuario.senha]);
 
     if (usuarioEncontrado && usuarioEncontrado.length > 0) {
         return usuarioEncontrado[0];
