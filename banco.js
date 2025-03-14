@@ -5,7 +5,7 @@ async function conectarBD() {
         return global.conexao;
     }
 
-    const conexao = mysql.createConnection(
+    const conexao = await mysql.createConnection(
         {
             host: 'localhost',
             port: 3306,
@@ -14,6 +14,8 @@ async function conectarBD() {
             database: 'mflix'
         }
     );
+
+    console.log('conexao', conexao);
 
     global.conexao = conexao;
     return conexao;
