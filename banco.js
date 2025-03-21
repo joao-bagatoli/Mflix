@@ -36,7 +36,8 @@ async function buscarPerfis(usuCodigo) {
     const conexao = await conectarBD();
 
     const sql = "select * from perfis where usucodigo=?;";
-    const [perfisEncontrados] = conexao.query(sql, [usuCodigo]);
+    const [perfisEncontrados] = await conexao.query(sql, [usuCodigo]);
+    console.log('perfisEncontrados', perfisEncontrados);
 
     return perfisEncontrados;
 }

@@ -24,11 +24,20 @@
         </h1>
     </div>
 
-    <!-- aqui1 -->
+    <%= quantidade = registroPerfis.length %>
 
-    <div class="grid grid-cols-4 gap-8">
+    <div class="grid grid-cols-<%=quantidade%> gap-8">
 
-        <!-- aqui2 -->
+        <% for(i = 0; i < registroPerfis.length; i++) { %>
+            <a href="/entrarPerfil/<%= registroPerfis[i].percodigo %>">
+                <div class="flex flex-col items-center">
+                    <img class="rounded-full w-36 h-36 mb-4" src="images/<%= registroPerfis[i].perfoto %>" height="150" width="150">
+                    <span class="text-xl">
+                        <%= registroPerfis[i].pernome %>
+                    </span>
+                </div>
+            </a>
+        <% } %>
 
     </div>
     <div class="mt-8">
