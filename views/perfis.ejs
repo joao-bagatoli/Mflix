@@ -23,10 +23,7 @@
             Quem está assistindo?
         </h1>
     </div>
-
-    <%= quantidade = registroPerfis.length %>
-
-    <div class="grid grid-cols-<%=quantidade%> gap-8">
+    <div class="grid grid-cols-<%=registroPerfis.length%> gap-8">
 
         <% for(i = 0; i < registroPerfis.length; i++) { %>
             <a href="/entrarPerfil/<%= registroPerfis[i].percodigo %>">

@@ -37,9 +37,17 @@ async function buscarPerfis(usuCodigo) {
 
     const sql = "select * from perfis where usucodigo=?;";
     const [perfisEncontrados] = await conexao.query(sql, [usuCodigo]);
-    console.log('perfisEncontrados', perfisEncontrados);
 
     return perfisEncontrados;
 }
 
-module.exports = { buscarUsuario, buscarPerfis };
+async function buscarPerfil(codigoPerfil) {
+    const conexao = await conectarBD();
+
+    const sql = "select * from perfis where percodigo=?;";
+    const [dadosPerfil] = await conexao.query(sql, [codigoPerfil]);
+
+    return dadosPerfil[0];
+}
+
+module.exports = { buscarUsuario, buscarPerfis, buscarPerfil };

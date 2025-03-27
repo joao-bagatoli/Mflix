@@ -13,6 +13,21 @@ router.get('/perfis', async function(req, res, next) {
   res.render('perfis', { titulo: 'MFlix - Perfis', registroPerfis});
 });
 
+router.get('/entrarPerfil/:id', async function (req, res, next) {
+  verificarLogin(res);
+
+  const codigoPerfil = parseInt(req.params.id);
+  const dadosPerfil = await global.banco.buscarPerfil(codigoPerfil);
+
+  global.perfil = dadosPerfil;
+  res.redirect('/browse');
+});
+
+router.get('/browse', function(req, res, next) {
+  verificarLogin(res);
+  res.render('browse', { titulo: 'MFlix - Filmes', imagem: global.perfil.perfoto });
+});
+
 router.post('/login', async function(req, res, next) {
   const email = req.body.email;
   const senha = req.body.senha;
