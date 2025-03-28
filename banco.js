@@ -50,4 +50,13 @@ async function buscarPerfil(codigoPerfil) {
     return dadosPerfil[0];
 }
 
-module.exports = { buscarUsuario, buscarPerfis, buscarPerfil };
+async function buscarAdmin(email, senha) {
+    const conexao = await conectarBD();
+
+    const sql = "select * from administradores where adminemail=? and adminsenha=?;"
+    const [admin] = await conexao.query(sql, [email, senha]);
+
+    return admin[0];
+}
+
+module.exports = { buscarUsuario, buscarPerfis, buscarPerfil, buscarAdmin };
