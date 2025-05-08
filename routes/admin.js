@@ -32,6 +32,12 @@ router.get('/sair', function(req, res) {
   res.redirect('/admin');
 });
 
+router.get('/categorias', async function(req, res) {
+  verificaLogin(res);
+  const categorias = await global.banco.adminBuscarCategorias();
+  res.render('admin/categorias', { categorias, mensagem: null, sucesso: false, admNome: global.adminNome });
+});
+
 function verificaLogin(res) {
   if (!global.adminEmail || global.adminEmail === '') {
     res.redirect('/admin');

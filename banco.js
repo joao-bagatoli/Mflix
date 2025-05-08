@@ -59,4 +59,13 @@ async function buscarAdmin(email, senha) {
     return admin[0];
 }
 
-module.exports = { buscarUsuario, buscarPerfis, buscarPerfil, buscarAdmin };
+async function adminBuscarCategorias() {
+    const conexao = await conectarBD();
+
+    const sql = "select * from categorias order by catnome;";
+    const [categorias] = await conexao.query(sql);
+
+    return categorias;
+}
+
+module.exports = { buscarUsuario, buscarPerfis, buscarPerfil, buscarAdmin, adminBuscarCategorias };
