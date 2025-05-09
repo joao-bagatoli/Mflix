@@ -38,6 +38,43 @@ router.get('/categorias', async function(req, res) {
   res.render('admin/categorias', { categorias, mensagem: null, sucesso: false, admNome: global.adminNome });
 });
 
+router.get('/novacategoria', function(req, res) {
+  verificaLogin(res);
+  res.render('admin/categorias_novo', { admNome: global.adminNome, mensagem: null, sucesso: false });
+});
+
+router.post('/novacategoria', async function(req, res) {
+  verificaLogin(res);
+
+  const { catnome, catnomenormal } = req.body;
+
+  if (!catnome || !catnomenormal) {
+    return res.render('admin/categorias_novo', {
+      admNome: global.adminNome,
+      mensagem: 'Todos os campos devem ser preenchidos',
+      sucesso: false
+    })
+  }
+
+  const categoriaJaExiste = await global.banco.adminBuscarCategoria(catnome);
+
+  if (categoriaJaExiste) {
+    return res.render('admin/categorias_novo', {
+      admNome: global.adminNome,
+      mensagem: 'Categoria já existe no banco de dados',
+      sucesso: false
+    });
+  }
+
+  await global.banco.adminInserirCategoria(catnome, catnomenormal);
+
+  return res.render('admin/categorias_novo', {
+    admNome: global.admNome,
+    mensagem: 'Categoria criada com sucesso',
+    sucesso: true
+  });
+})
+
 function verificaLogin(res) {
   if (!global.adminEmail || global.adminEmail === '') {
     res.redirect('/admin');

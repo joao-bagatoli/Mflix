@@ -68,4 +68,21 @@ async function adminBuscarCategorias() {
     return categorias;
 }
 
-module.exports = { buscarUsuario, buscarPerfis, buscarPerfil, buscarAdmin, adminBuscarCategorias };
+async function adminBuscarCategoria(nome) {
+    const conexao = await conectarBD();
+
+    const sql = "select * from categorias where catnome=?;";
+    const [categoria] = await conexao.query(sql, [nome]);
+
+    return categoria.length > 0;
+}
+
+async function adminInserirCategoria(nome, nomenormal) {
+    const conexao = await conectarBD();
+
+    const sql = "insert into categorias (catnome, catnomenormal) values (?,?);";
+
+    await conexao.query(sql, [nome, nomenormal]);
+}
+
+module.exports = { buscarUsuario, buscarPerfis, buscarPerfil, buscarAdmin, adminBuscarCategorias, adminBuscarCategoria, adminInserirCategoria };
