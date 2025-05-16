@@ -85,4 +85,29 @@ async function adminInserirCategoria(nome, nomenormal) {
     await conexao.query(sql, [nome, nomenormal]);
 }
 
-module.exports = { buscarUsuario, buscarPerfis, buscarPerfil, buscarAdmin, adminBuscarCategorias, adminBuscarCategoria, adminInserirCategoria };
+async function adminBuscarCategoriaPorCodigo(codigo) {
+    const conexao = await conectarBD();
+
+    const sql = "select * from categorias where catcodigo=?;"
+    const [categoria] = await conexao.query(sql, [codigo]);
+
+    return categoria[0] || null;
+}
+
+async function adminAtualizarCategoria(codigo, nome, nomenormal) {
+    const conexao = await conectarBD();
+    const sql = 'update categorias set catnome=?, catnomenormal=? where catcodigo=?;';
+    await conexao.query(sql, [nome, nomenormal, codigo]);
+}
+
+module.exports = { 
+    buscarUsuario, 
+    buscarPerfis, 
+    buscarPerfil, 
+    buscarAdmin, 
+    adminBuscarCategorias, 
+    adminBuscarCategoria, 
+    adminInserirCategoria, 
+    adminBuscarCategoriaPorCodigo,
+    adminAtualizarCategoria 
+};
