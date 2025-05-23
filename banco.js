@@ -100,6 +100,12 @@ async function adminAtualizarCategoria(codigo, nome, nomenormal) {
     await conexao.query(sql, [nome, nomenormal, codigo]);
 }
 
+async function adminExcluirCategoria(codigo) {
+    const conexao = await conectarBD();
+    const sql = "delete from categorias where catcodigo = ?;";
+    await conexao.query(sql, [codigo]);
+}
+
 module.exports = { 
     buscarUsuario, 
     buscarPerfis, 
@@ -109,5 +115,6 @@ module.exports = {
     adminBuscarCategoria, 
     adminInserirCategoria, 
     adminBuscarCategoriaPorCodigo,
-    adminAtualizarCategoria 
+    adminAtualizarCategoria,
+    adminExcluirCategoria 
 };

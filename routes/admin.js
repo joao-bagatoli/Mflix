@@ -40,7 +40,6 @@ router.get('/categorias', async function(req, res) {
 
 router.get('/novacategoria', function(req, res) {
   verificaLogin(res);
-  // res.render('admin/categorias_novo', { admNome: global.adminNome, mensagem: null, sucesso: false });
   res.render('admin/categorias_form', { admNome: global.adminNome, categoria: null, mensagem: null, sucesso: false });
 });
 
@@ -50,11 +49,6 @@ router.post('/novacategoria', async function(req, res) {
   const { catnome, catnomenormal } = req.body;
 
   if (!catnome || !catnomenormal) {
-    // return res.render('admin/categorias_novo', {
-    //   admNome: global.adminNome,
-    //   mensagem: 'Todos os campos devem ser preenchidos',
-    //   sucesso: false
-    // });
     return res.render('admin/categorias_form', {
       admNome: global.adminNome,
       categoria: null,
@@ -66,11 +60,6 @@ router.post('/novacategoria', async function(req, res) {
   const categoriaJaExiste = await global.banco.adminBuscarCategoria(catnome);
 
   if (categoriaJaExiste) {
-    // return res.render('admin/categorias_novo', {
-    //   admNome: global.adminNome,
-    //   mensagem: 'Categoria já existe no banco de dados',
-    //   sucesso: false
-    // });
     return res.render('admin/categorias_novo', {
       admNome: global.adminNome,
       categoria: null,
@@ -81,11 +70,6 @@ router.post('/novacategoria', async function(req, res) {
 
   await global.banco.adminInserirCategoria(catnome, catnomenormal);
 
-  // return res.render('admin/categorias_novo', {
-  //   admNome: global.admNome,
-  //   mensagem: 'Categoria criada com sucesso',
-  //   sucesso: true
-  // });
   return res.render('admin/categorias_form', {
     admNome: global.admNome,
     categoria: null,
@@ -101,11 +85,6 @@ router.get('/atualizarcategoria/:id', async function(req, res) {
   const categoria = await global.banco.adminBuscarCategoriaPorCodigo(codigo);
 
   if (!categoria) {
-    // return res.render('admin/categorias_atualizar', {
-    //   admNome: global.admNome,
-    //   mensagem: 'Categoria não encontrada',
-    //   sucesso: false
-    // });
     return res.render('admin/categorias_form', {
       admNome: global.admNome,
       categoria: {},
@@ -114,12 +93,6 @@ router.get('/atualizarcategoria/:id', async function(req, res) {
     });
   }
 
-  // res.render('admin/categorias_atualizar', {
-  //   admNome: global.admNome,
-  //   categoria,
-  //   mensagem: null,
-  //   sucesso: null
-  // });
   res.render('admin/categorias_form', {
     admNome: global.admNome,
     categoria,
@@ -135,12 +108,6 @@ router.post('/atualizarcategoria/:id', async function(req, res) {
   const { catnome, catnomenormal } = req.body;
 
   if (!catnome || !catnomenormal) {
-    // return res.render('admin/categorias_atualizar', {
-    //   admNome: global.admNome,
-    //   categoria: { catcodigo, catnome, catnomenormal },
-    //   mensagem: 'Todos os campos são obrigatórios',
-    //   sucesso: false
-    // });
     return res.render('admin/categorias_form', {
       admNome: global.admNome,
       categoria: { catcodigo, catnome, catnomenormal },
@@ -152,12 +119,6 @@ router.post('/atualizarcategoria/:id', async function(req, res) {
   const categoriaJaExiste = await global.banco.adminBuscarCategoria(catnome);
 
   if (categoriaJaExiste) {
-    // return res.render('admin/categorias_atualizar', {
-    //   admNome: global.admNome,
-    //   categoria: { catcodigo, catnome, catnomenormal },
-    //   mensagem: 'Categoria já existe',
-    //   sucesso: false
-    // });
     return res.render('admin/categorias_form', {
       admNome: global.admNome,
       categoria: { catcodigo, catnome, catnomenormal },
@@ -174,6 +135,27 @@ router.post('/atualizarcategoria/:id', async function(req, res) {
     mensagem: 'Categoria atualizada com sucesso',
     sucesso: true
   });
+});
+
+router.get('/excluircategoria/:id', async function (req, res) {
+  verificaLogin();
+
+  const catcodigo = req.params.id;
+  const categoria = await global.banco.adminBuscarCategoriaPorCodigo(catcodigo);
+
+  if (!categoria) {
+    return res.render('admin/categorias', {
+      admNome: global.admNome,
+      categorias: await global.banco.adminBuscarCategorias(),
+      mensagem: 'Categoria não encontrada',
+      sucesso: false
+    });
+  }
+
+  // verificar se a categoria possui filmes vinculados a ela
+
+  await global.banco.adminExcluirCategoria(catcodigo);
+  res.redirect('/admin/categorias');
 });
 
 function verificaLogin(res) {
